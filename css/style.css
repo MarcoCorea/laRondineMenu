@@ -1,0 +1,170 @@
+/******************
+ * BODY E STRUTTURA
+ ******************
+*/
+
+body {
+    background-color: var(--secondario);
+    color: var(--primario);
+    font-size: 16px;
+    line-height: 1.3;
+}
+
+a {
+    color: var(--primario);
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/******************
+ * HEADER
+ ******************
+*/
+
+header .container,
+.menu,
+.menu ul {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-self: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 3rem;
+}
+
+.menu ul {
+    list-style-type: none;
+    text-align: center;
+    gap: 1.5rem;
+}
+
+header .menu a {
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/******************
+ * SEZIONE TOP
+ ******************
+*/
+
+.top {
+    background-image: url("https://ctf.francescomancuso.it/webserver/tpsit/pizzeriaWeb/img/header.webp");
+    background-position: top center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.top .overlay {
+    padding: 7rem 0;
+    padding-top: 11rem;
+    background-color: var(--p-glass);
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
+    color: #fff;
+    text-align: center;
+    font-size: 120%;
+}
+
+/******************
+ * SEZIONI PAGINA
+ ******************
+*/
+
+.pagina .sezione {
+    margin: 4rem 0;
+}
+
+/******************
+ * BOX
+ ******************
+*/
+
+.pagina .sezione .box {
+    border: 1px solid var(--primario);
+    border-radius: 1rem;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-self: center;
+    background-color: var(--p-glass);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #fff;
+}
+
+.pagina .sezione .box .testo, 
+.pagina .sezione .box .prezzo {
+    padding: 1rem;
+}
+
+.pagina .sezione .box img {
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 1rem 1rem 0 0;
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.pagina .sezione .box .testo {
+    flex-grow: 4;
+    width: 100%;
+    padding-bottom: 0;
+}
+
+.pagina .sezione .box .testo p {
+    font-size: 92%;
+}
+
+.pagina .sezione .box .prezzo {
+    width: 100%;
+    text-align: right;
+    font-weight: bold;
+    font-size: 120%;
+}
+
+/******************
+ * ELEMENTI
+ ******************
+*/
+
+footer {
+    background-color: var(--primario);
+    color: var(--secondario);
+    padding: 1rem 0;
+    text-align: center;
+    font-weight: 200;
+    font-size: 90%;
+}
+
+footer .container {
+    opacity: 0.8;
+}
+
+footer a {
+    color: inherit;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+footer i {
+    font-size: 90%;
+}
