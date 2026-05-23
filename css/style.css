@@ -227,3 +227,31 @@ footer i {
         flex: 0 0 auto; /* Impedisce ai link di restringersi e deformarsi */
     }
 }
+
+.menu ul {
+    display: flex;
+    white-space: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: auto !important; /* Fondamentale per lo script */
+    
+    /* Rimuoviamo eventuali padding laterali che i browser digeriscono male nello scroll */
+    padding-left: 0;
+    padding-right: 0; 
+}
+
+/* Crea lo spazio protettivo all'INIZIO dell'elenco */
+.menu ul::before {
+    content: '';
+    display: block;
+    flex-shrink: 0;
+    width: 20px; /* Regola qui lo spazio a sinistra */
+}
+
+/* Crea lo spazio protettivo alla FINE dell'elenco */
+.menu ul::after {
+    content: '';
+    display: block;
+    flex-shrink: 0;
+    width: 20px; /* Regola qui lo spazio a destra */
+}

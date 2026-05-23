@@ -977,7 +977,8 @@
                 const menuUl = document.querySelector('.menu ul');
                 if (!menuUl) return;
 
-                let scrollSpeed = 0.5; // Pixel per frame (regolabile)
+                let scrollSpeed = 0.5; // Velocità di base
+                let currentDirection = 1; // 1 = destra, -1 = sinistra
                 let animationFrameId;
                 let isUserInteracting = false;
                 let timeoutId;
@@ -986,17 +987,22 @@
                     if (!isUserInteracting) {
                         const maxScroll = menuUl.scrollWidth - menuUl.clientWidth;
 
-                        // Se il menu è effettivamente più largo dello schermo, scorri
                         if (maxScroll > 0) {
-                            menuUl.scrollLeft += scrollSpeed;
+                            menuUl.scrollLeft += (scrollSpeed * currentDirection);
 
-                            // Se arriviamo alla fine (con tolleranza di 3px per i decimali dei display mobile)
-                            if (Math.ceil(menuUl.scrollLeft) >= maxScroll - 3) {
-                                menuUl.scrollLeft = 0;
+                            // 1. RIMBALZO A DESTRA
+                            // Tolleranza aumentata a 25px per assorbire lo spazio dell'::after CSS
+                            if (currentDirection === 1 && Math.ceil(menuUl.scrollLeft) >= (maxScroll - 25)) {
+                                currentDirection = -1;
+                            }
+
+                            // 2. RIMBALZO A SINISTRA
+                            // Tolleranza a 22px per fermarsi morbidamente sullo spazio dell'::before CSS
+                            if (currentDirection === -1 && menuUl.scrollLeft <= 22) {
+                                currentDirection = 1;
                             }
                         }
                     }
-                    // Continua il loop del frame
                     animationFrameId = requestAnimationFrame(updateScroll);
                 };
 
@@ -1007,25 +1013,27 @@
 
                 const restartScroll = () => {
                     clearTimeout(timeoutId);
-                    // Aspetta 1.5 secondi di totale immobilità prima di ripartire
                     timeoutId = setTimeout(() => {
                         isUserInteracting = false;
+
+                        const maxScroll = menuUl.scrollWidth - menuUl.clientWidth;
+                        if (menuUl.scrollLeft >= maxScroll - 25) {
+                            currentDirection = -1;
+                        } else if (menuUl.scrollLeft <= 22) {
+                            currentDirection = 1;
+                        }
                     }, 1500);
                 };
 
-                // Ascolta TUTTI gli eventi di interazione possibili su mobile
+                // Eventi touch e mouse
                 menuUl.addEventListener('touchstart', stopScroll, { passive: true });
                 menuUl.addEventListener('touchmove', stopScroll, { passive: true });
                 menuUl.addEventListener('touchend', restartScroll, { passive: true });
-
-                // Protezione extra se l'utente usa un mouse o scrolla in altri modi
                 menuUl.addEventListener('mousedown', stopScroll);
                 menuUl.addEventListener('mouseleave', restartScroll);
                 menuUl.addEventListener('mouseup', restartScroll);
 
-                // Avvia solo su mobile (sotto i 768px)
                 if (window.innerWidth < 768) {
-                    // Un piccolo delay di 100ms assicura che il browser abbia calcolato bene le larghezze degli elementi
                     setTimeout(() => {
                         animationFrameId = requestAnimationFrame(updateScroll);
                     }, 100);
