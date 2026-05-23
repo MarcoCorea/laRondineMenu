@@ -166,7 +166,7 @@ header .container {
     width: 95%;
     margin: 4rem auto;
     border-radius: 2rem;
-    background-image: url("https://ctf.francescomancuso.it/webserver/tpsit/pizzeriaWeb/img/texture.svg");
+    background-image: url("https://marcocorea.github.io/laRondineMenu/img/presentazione-bg.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -295,17 +295,17 @@ header .container {
 }
 
 .pagina .sezione.pizze .titolo {
-    background-image: url("https://ctf.francescomancuso.it/webserver/tpsit/pizzeriaWeb/img/pizze.webp");
+    background-image: url("https://marcocorea.github.io/laRondineMenu/img/pizze.webp");
     background-position: 50% 80%;
 }
 
 .pagina .sezione.dolci .titolo {
-    background-image: url("https://ctf.francescomancuso.it/webserver/tpsit/pizzeriaWeb/img/dolci.webp");
+    background-image: url("https://marcocorea.github.io/laRondineMenu/img/dolci.webp");
     background-position: 50% 70%;
 }
 
 .pagina .sezione.bevande .titolo {
-    background-image: url("https://ctf.francescomancuso.it/webserver/tpsit/pizzeriaWeb/img/bevande.webp");
+    background-image: url("https://marcocorea.github.io/laRondineMenu/img/bevande.webp");
     background-position: 50% 50%;
 }
 
