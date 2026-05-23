@@ -39,27 +39,27 @@
 
             <div class="menu">
                 <ul>
-                    <a href="#antipasti">
-                        <li><i class="fa-solid fa-pizza-slice"></i> Antipasti</li>
-                    </a>
-                    <a href="#rosticceria">
-                        <li><i class="fa-solid fa-pizza-slice"></i> Rosticceria</li>
-                    </a>
-                    <a href="#primi">
-                        <li><i class="fa-solid fa-pizza-slice"></i> Primi</li>
-                    </a>
-                    <a href="#secondi">
-                        <li><i class="fa-solid fa-pizza-slice"></i> Secondi</li>
-                    </a>
-                    <a href="#pizze">
-                        <li><i class="fa-solid fa-pizza-slice"></i> Pizze</li>
-                    </a>
-                    <a href="#dolci">
-                        <li><i class="fa-solid fa-ice-cream"></i> Dolci</li>
-                    </a>
-                    <a href="#bevande">
-                        <li><i class="fa-solid fa-martini-glass-citrus"></i> Bevande</li>
-                    </a>
+                    <li>
+                        <a href="#antipasti"><i class="fa-solid fa-pizza-slice"></i> Antipasti</a>
+                    </li>
+                    <li>
+                        <a href="#rosticceria"><i class="fa-solid fa-pizza-slice"></i> Rosticceria</a>
+                    </li>
+                    <li>
+                        <a href="#primi"><i class="fa-solid fa-pizza-slice"></i> Primi</a>
+                    </li>
+                    <li>
+                        <a href="#secondi"><i class="fa-solid fa-pizza-slice"></i> Secondi</a>
+                    </li>
+                    <li>
+                        <a href="#pizze"><i class="fa-solid fa-pizza-slice"></i> Pizze</a>
+                    </li>
+                    <li>
+                        <a href="#dolci"><i class="fa-solid fa-ice-cream"></i> Dolci</a>
+                    </li>
+                    <li>
+                        <a href="#bevande"><i class="fa-solid fa-martini-glass-citrus"></i> Bevande</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -977,8 +977,8 @@
                 const menuUl = document.querySelector('.menu ul');
                 if (!menuUl) return;
 
-                let scrollSpeed = 0.5; // Velocità di base
-                let currentDirection = 1; // 1 = destra, -1 = sinistra
+                let scrollSpeed = 0.5; // Velocità di base dello scorrimento automatizzato
+                let currentDirection = 1; // 1 = verso destra, -1 = verso sinistra
                 let animationFrameId;
                 let isUserInteracting = false;
                 let timeoutId;
@@ -991,14 +991,14 @@
                             menuUl.scrollLeft += (scrollSpeed * currentDirection);
 
                             // 1. RIMBALZO A DESTRA
-                            // Tolleranza aumentata a 25px per assorbire lo spazio dell'::after CSS
-                            if (currentDirection === 1 && Math.ceil(menuUl.scrollLeft) >= (maxScroll - 25)) {
+                            // Usiamo una tolleranza di 21px per assorbire perfettamente i 20px dell'::after CSS
+                            if (currentDirection === 1 && Math.ceil(menuUl.scrollLeft) >= (maxScroll - 21)) {
                                 currentDirection = -1;
                             }
 
                             // 2. RIMBALZO A SINISTRA
-                            // Tolleranza a 22px per fermarsi morbidamente sullo spazio dell'::before CSS
-                            if (currentDirection === -1 && menuUl.scrollLeft <= 22) {
+                            // Usiamo una tolleranza di 21px per fermarsi sul cuscinetto dell'::before CSS
+                            if (currentDirection === -1 && menuUl.scrollLeft <= 21) {
                                 currentDirection = 1;
                             }
                         }
@@ -1017,26 +1017,34 @@
                         isUserInteracting = false;
 
                         const maxScroll = menuUl.scrollWidth - menuUl.clientWidth;
-                        if (menuUl.scrollLeft >= maxScroll - 25) {
+                        // Quando l'utente rilascia il dito, ricalcoliamo la direzione corretta basandoci sui 21px protettivi
+                        if (menuUl.scrollLeft >= maxScroll - 21) {
                             currentDirection = -1;
-                        } else if (menuUl.scrollLeft <= 22) {
+                        } else if (menuUl.scrollLeft <= 21) {
                             currentDirection = 1;
                         }
-                    }, 1500);
+                    }, 1500); // Riparte dopo un secondo e mezzo di inattività
                 };
 
-                // Eventi touch e mouse
+                // Eventi touch (ottimizzati per non interferire con i movimenti verticali della pagina principale)
                 menuUl.addEventListener('touchstart', stopScroll, { passive: true });
                 menuUl.addEventListener('touchmove', stopScroll, { passive: true });
                 menuUl.addEventListener('touchend', restartScroll, { passive: true });
+
+                // Eventi mouse per test da computer
                 menuUl.addEventListener('mousedown', stopScroll);
                 menuUl.addEventListener('mouseleave', restartScroll);
                 menuUl.addEventListener('mouseup', restartScroll);
 
+                // Avvia l'autoscroll solo su Mobile (schermi inferiori a 768px)
                 if (window.innerWidth < 768) {
                     setTimeout(() => {
-                        animationFrameId = requestAnimationFrame(updateScroll);
-                    }, 100);
+                        // Se i link entrano tutti perfettamente nello schermo a destra, l'autoscroll non serve e non parte
+                        const maxScroll = menuUl.scrollWidth - menuUl.clientWidth;
+                        if (maxScroll > 0) {
+                            animationFrameId = requestAnimationFrame(updateScroll);
+                        }
+                    }, 200);
                 }
             });
         </script>

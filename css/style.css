@@ -1,8 +1,7 @@
 /******************
- * BODY E STRUTTURA
+ * VARIABILI E BASE
  ******************
 */
-
 body {
     background-color: var(--secondario);
     color: var(--primario);
@@ -21,58 +20,59 @@ a {
 }
 
 /******************
- * HEADER
+ * HEADER & MENU (Desktop di base)
  ******************
 */
-
-/* Sistemato: diviso l'header dal menu per evitare conflitti su mobile */
 header .container {
     display: flex;
     flex-direction: row;
     gap: 1rem;
     flex-wrap: nowrap;
-    justify-content: space-between;
-    align-self: center;
+    justify-content: space-between; /* Mette il logo a sinistra e il menu a destra */
+    align-items: center;
 }
 
 .logo {
     display: flex;
     align-items: center;
+    flex-shrink: 0; /* Impedisce al logo di rimpicciolirsi */
 }
 
 .logo img {
     height: 3rem;
 }
 
-/* Base del menu per Desktop */
 .menu {
     display: flex;
     align-items: center;
-    overflow-y: hidden;
+    justify-content: flex-end; /* Spinge la lista dei link a destra su desktop */
 }
 
 .menu ul {
     display: flex;
     flex-direction: row;
+    flex-wrap: nowrap;
+    white-space: nowrap;
     list-style-type: none;
-    text-align: center;
-    gap: 1.5rem;
     margin: 0;
     padding: 0;
+    gap: 1.5rem;
 }
 
-header .menu a {
+/* Stilizzazione dei link interni ai li */
+.menu ul li a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* Spazio tra icona e testo */
     color: #fff;
     font-weight: 600;
     text-decoration: none;
-    white-space: nowrap; /* Evita che le parole si spezzino su PC */
 }
 
 /******************
  * SEZIONE TOP
  ******************
 */
-
 .top {
     background-image: url("https://marcocorea.github.io/laRondineMenu/img/header.webp");
     background-position: top center;
@@ -95,16 +95,14 @@ header .menu a {
  * SEZIONI PAGINA
  ******************
 */
-
 .pagina .sezione {
     margin: 4rem 0;
 }
 
 /******************
- * BOX
+ * BOX PRODOTTI
  ******************
 */
-
 .pagina .sezione .box {
     border: 1px solid var(--primario);
     border-radius: 1rem;
@@ -153,10 +151,9 @@ header .menu a {
 }
 
 /******************
- * ELEMENTI
+ * FOOTER
  ******************
 */
-
 footer {
     background-color: var(--primario);
     color: var(--secondario);
@@ -181,41 +178,49 @@ footer i {
 }
 
 /* ========================================================
-   MODALITÀ TELEFONO (Logo fisso a sinistra e menu che scorre a destra)
+   MODALITÀ MOBILE (Menu a destra con Scroll Orizzontale Puro)
    ======================================================== */
 @media (max-width: 767px) {
     header .container {
-        display: flex;
-        flex-direction: row; /* Forza logo e menu a stare affiancati */
-        flex-wrap: nowrap;   /* Impedisce al menu di scendere sotto il logo */
-        justify-content: space-between;
-        align-items: center;
-        width: 90%;          /* Mantiene la consistenza del container */
+        width: 90%;
         gap: 1rem;
     }
 
-    .logo {
-        flex-shrink: 0; /* Impedisce al logo di rimpicciolirsi se il menu spinge */
-    }
-
     .menu {
-        flex-grow: 1;   /* Permette al menu di occupare tutto lo spazio restante */
-        overflow: hidden; /* Taglia il menu che esce dallo schermo permettendo lo scroll interno */
+        overflow: hidden; 
+        flex-grow: 1;              /* Occupa lo spazio rimanente a destra del logo */
         display: flex;
+        justify-content: flex-end; /* Allinea l'intera area scorrevole verso destra */
     }
 
     .menu ul {
-        width: 100%;
-        flex-wrap: nowrap;          /* Forza gli elementi su una riga sola */
         overflow-x: auto;           /* Attiva lo scroll orizzontale */
-        justify-content: flex-start;/* Allinea le scritte a sinistra pronti per lo scroll */
-        -webkit-overflow-scrolling: touch; /* Scorrimento fluido e nativo su iOS/Android */
-        scroll-behavior: smooth;
-        gap: 1.2rem;                /* Distanza tra le voci del menu */
-        padding: 0;
+        overflow-y: hidden;         /* BLOCCO TOTALE ASSE Y */
+        touch-action: pan-x;        /* Forza il browser mobile a tracciare SOLO il movimento X */
+        -webkit-overflow-scrolling: touch; /* Scroll fluido nativo */
+        scroll-behavior: auto !important;   
+        justify-content: flex-start; /* I link interni partono da sinistra nell'area di scroll */
+        gap: 1.2rem;
+        padding-left: 0;
+        padding-right: 0;
     }
 
-    /* Nasconde la barra visiva su tutti i browser mobile per estetica */
+    /* Spaziatori interni per non far incollare le scritte ai bordi dello schermo */
+    .menu ul::before {
+        content: '';
+        display: block;
+        flex-shrink: 0;
+        width: 20px;
+    }
+
+    .menu ul::after {
+        content: '';
+        display: block;
+        flex-shrink: 0;
+        width: 20px;
+    }
+
+    /* Nasconde visivamente la barra di scorrimento su tutti i sistemi operativi */
     .menu ul::-webkit-scrollbar {
         display: none;
     }
@@ -223,36 +228,4 @@ footer i {
         -ms-overflow-style: none;  /* IE/Edge */
         scrollbar-width: none;     /* Firefox */
     }
-
-    .menu a {
-        flex: 0 0 auto; /* Impedisce ai link di restringersi e deformarsi */
-    }
-}
-
-.menu ul {
-    display: flex;
-    white-space: nowrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: auto !important; /* Fondamentale per lo script */
-    
-    /* Rimuoviamo eventuali padding laterali che i browser digeriscono male nello scroll */
-    padding-left: 0;
-    padding-right: 0; 
-}
-
-/* Crea lo spazio protettivo all'INIZIO dell'elenco */
-.menu ul::before {
-    content: '';
-    display: block;
-    flex-shrink: 0;
-    width: 20px; /* Regola qui lo spazio a sinistra */
-}
-
-/* Crea lo spazio protettivo alla FINE dell'elenco */
-.menu ul::after {
-    content: '';
-    display: block;
-    flex-shrink: 0;
-    width: 20px; /* Regola qui lo spazio a destra */
 }
