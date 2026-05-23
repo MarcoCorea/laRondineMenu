@@ -971,50 +971,67 @@
             <div class="loader" id="loader">
                 <img src="https://marcocorea.github.io/laRondineMenu/img/logo-menu-white.png" alt="Caricamento...">
             </div>
+        </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const menuUl = document.querySelector('.menu ul');
+                if (!menuUl) return;
 
-            <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                    const menuUl = document.querySelector('.menu ul');
-                    if (!menuUl) return;
+                let scrollSpeed = 0.5; // Pixel per frame (regolabile)
+                let animationFrameId;
+                let isUserInteracting = false;
+                let timeoutId;
 
-                    let scrollSpeed = 1; // Velocità: aumenta per andare più veloce, diminuisci per rallentare
-                    let autoScrollInterval;
-                    let isUserInteracting = false;
+                const updateScroll = () => {
+                    if (!isUserInteracting) {
+                        const maxScroll = menuUl.scrollWidth - menuUl.clientWidth;
 
-                    // Funzione che fa scorrere il menu
-                    const startAutoScroll = () => {
-                        autoScrollInterval = setInterval(() => {
-                            if (!isUserInteracting) {
-                                // Incrementa lo scroll verso destra
-                                menuUl.scrollLeft += scrollSpeed;
+                        // Se il menu è effettivamente più largo dello schermo, scorri
+                        if (maxScroll > 0) {
+                            menuUl.scrollLeft += scrollSpeed;
 
-                                // Se arriva alla fine del menu, torna all'inizio (effetto loop)
-                                if (menuUl.scrollLeft >= (menuUl.scrollWidth - menuUl.clientWidth)) {
-                                    menuUl.scrollLeft = 0;
-                                }
+                            // Se arriviamo alla fine (con tolleranza di 3px per i decimali dei display mobile)
+                            if (Math.ceil(menuUl.scrollLeft) >= maxScroll - 3) {
+                                menuUl.scrollLeft = 0;
                             }
-                        }, 30); // Esegue il movimento ogni 30 millisecondi
-                    };
-
-                    // Ferma l'autoscroll quando l'utente tocca o scorre manualmente
-                    menuUl.addEventListener('touchstart', () => {
-                        isUserInteracting = true;
-                    });
-
-                    // Fa ripartire l'autoscroll quando l'utente solleva il dito
-                    menuUl.addEventListener('touchend', () => {
-                        // Un piccolo timeout evita scatti bruschi se c'è un'inerzia dello scroll della pagina
-                        setTimeout(() => {
-                            isUserInteracting = false;
-                        }, 1500);
-                    });
-
-                    // Avvia l'effetto solo se siamo su mobile (schermo sotto i 768px)
-                    if (window.innerWidth < 768) {
-                        startAutoScroll();
+                        }
                     }
-                });
-            </script>
+                    // Continua il loop del frame
+                    animationFrameId = requestAnimationFrame(updateScroll);
+                };
+
+                const stopScroll = () => {
+                    isUserInteracting = true;
+                    clearTimeout(timeoutId);
+                };
+
+                const restartScroll = () => {
+                    clearTimeout(timeoutId);
+                    // Aspetta 1.5 secondi di totale immobilità prima di ripartire
+                    timeoutId = setTimeout(() => {
+                        isUserInteracting = false;
+                    }, 1500);
+                };
+
+                // Ascolta TUTTI gli eventi di interazione possibili su mobile
+                menuUl.addEventListener('touchstart', stopScroll, { passive: true });
+                menuUl.addEventListener('touchmove', stopScroll, { passive: true });
+                menuUl.addEventListener('touchend', restartScroll, { passive: true });
+
+                // Protezione extra se l'utente usa un mouse o scrolla in altri modi
+                menuUl.addEventListener('mousedown', stopScroll);
+                menuUl.addEventListener('mouseleave', restartScroll);
+                menuUl.addEventListener('mouseup', restartScroll);
+
+                // Avvia solo su mobile (sotto i 768px)
+                if (window.innerWidth < 768) {
+                    // Un piccolo delay di 100ms assicura che il browser abbia calcolato bene le larghezze degli elementi
+                    setTimeout(() => {
+                        animationFrameId = requestAnimationFrame(updateScroll);
+                    }, 100);
+                }
+            });
+        </script>
 </body>
 
 </html>
