@@ -31,6 +31,7 @@ button {
     --scuro: hsl(195, 100%, 8%);
     --secondario: hsl(202, 61%, 93%);
     --p-glass: hsla(195, 100%, 13%, 0.75);
+    --p-glass-2: hsla(195, 100%, 13%, 0.374);
     --p-glass-dark: hsla(195, 100%, 13%, 0.95);
     --s-glass: hsla(202, 61%, 93%, 0.68);
 }
